@@ -11,13 +11,11 @@ traeproject/
 ├── practice01/             # 练习1：基础LLM客户端
 │   └── llm_client.py      # 单次请求LLM并统计指标
 ├── practice02/             # 练习2：交互式聊天客户端
-│   └── chat_client.py     # 流式输出交互式聊天
-├── practice02.2/           # 练习2.2：工具调用客户端
-│   └── chat_client_with_tools.py  # 支持文件系统工具调用
-├── practice03/             # 练习3：增强版工具调用客户端
-│   ├── chat_client.py      # 基础聊天客户端
-│   ├── tool_client.py      # 工具客户端
-│   └── tool_chat_client.py # 支持curl网络访问的工具聊天客户端
+│   ├── chat_client.py     # 流式输出交互式聊天
+│   ├── tool_chat_client.py # 工具聊天客户端
+│   └── tool_client.py      # 工具客户端
+├── practice03/             # 练习3：聊天记录压缩客户端
+│   └── chat_client_with_summary.py # 支持聊天记录自动压缩
 └── README.md              # 项目说明文档
 ```
 
@@ -149,41 +147,39 @@ python practice02.2/chat_client_with_tools.py
 - 理解工具执行结果的处理和反馈机制
 - 掌握JSON格式的工具调用协议
 
-### Practice 03: 增强版工具调用客户端
+### Practice 03: 聊天记录压缩客户端
 
-**文件位置**: `practice03/tool_chat_client.py`
+**文件位置**: `practice03/chat_client_with_summary.py`
 
 **功能特点**:
-- 基于practice02.2的工具调用功能
-- 新增curl网络访问工具：
-  - `curl(url)` - 通过HTTP请求访问网页并返回内容
-- 支持识别curl相关指令，直接执行网络访问
-- 集成6个工具：5个文件操作工具 + 1个网络访问工具
+- 基于practice02的交互式聊天功能
+- 智能聊天记录压缩：
+  - 当聊天超过5轮时自动触发压缩
+  - 当聊天上下文长度超过3000字符时自动触发压缩
+  - 对前70%的聊天内容进行总结压缩
+  - 保留最后30%的聊天内容原文
+- 自动使用LLM进行聊天记录总结
 - 保持与之前版本相同的用户交互体验
-- 完整的错误处理和内容截断机制
+- 完整的错误处理机制
 
 **运行方式**:
 ```bash
-python practice03/tool_chat_client.py
+python practice03/chat_client_with_summary.py
 ```
 
 **使用说明**:
 1. 运行程序后，在终端输入消息与AI对话
-2. 可以要求AI执行文件操作，例如：
-   - "列出当前目录文件"
-   - "创建一个test.txt文件，内容是Hello World"
-3. 可以要求AI执行网络访问，例如：
-   - "curl https://www.example.com"
-   - "访问网页 https://www.python.org"
-4. AI会自动调用相应的工具并返回结果
+2. 正常与AI进行对话，无需手动触发压缩
+3. 当聊天达到5轮或上下文超过3k时，系统会自动进行压缩
+4. 压缩过程中会显示相应的系统提示
 5. 输入 'quit' 或 'exit' 退出程序
 
 **学习目标**:
-- 理解如何扩展工具调用系统
-- 掌握网络请求的基本原理和实现
-- 学习如何处理网络响应和错误
-- 理解工具调用的安全性考虑
-- 掌握如何设计和实现新的工具接口
+- 理解聊天历史管理的重要性
+- 掌握如何使用LLM进行文本总结
+- 学习如何设计和实现聊天记录压缩策略
+- 理解上下文长度限制对LLM性能的影响
+- 掌握如何在保持对话连贯性的同时优化上下文长度
 
 ## 技术栈
 
